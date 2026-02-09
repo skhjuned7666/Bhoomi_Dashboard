@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bhoomi Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="admin-dashboard.css" />
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true" role="button" tabindex="0" aria-label="Close sidebar"></div>
+    <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation" role="navigation" aria-hidden="false">
+      <div class="sidebar-header">
+        <div class="admin-logo">
+          <span class="logo-text">Bhoomi Admin</span>
+          <span class="logo-short">BA</span>
+        </div>
+        <button class="sidebar-close" id="sidebarClose" aria-label="Close sidebar" title="Close menu">
+          <span>&times;</span>
+        </button>
+      </div>
+      <nav class="admin-menu" aria-label="Main menu">
+        <button class="menu-item active" data-view="dashboard" aria-label="Go to Dashboard" role="menuitem">
+          <span>Dashboard</span>
+        </button>
+        <button class="menu-item" data-view="properties" aria-label="Go to Properties" role="menuitem">
+          <span>Properties</span>
+        </button>
+        <button class="menu-item" data-view="leads" aria-label="Go to Leads" role="menuitem">
+          <span>Leads</span>
+        </button>
+        <button class="menu-item" data-view="users" aria-label="Go to Users" role="menuitem">
+          <span>Users</span>
+        </button>
+        <button class="menu-item" data-view="settings" aria-label="Go to Settings" role="menuitem">
+          <span>Settings</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Topbar -->
+      <header class="admin-topbar">
+        <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div class="admin-topbar-left">
+          <h1 id="pageTitle">Dashboard</h1>
+          <div class="topbar-meta">
+            <span class="topbar-pill">Realtime Overview</span>
+            <span class="topbar-pill subtle">Last sync: 2s ago</span>
+          </div>
+        </div>
+        <div class="admin-topbar-right">
+          <div class="topbar-filters">
+            <select id="globalDateFilter">
+              <option value="today">Today</option>
+              <option value="7d" selected>Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+            </select>
+            <select id="globalCityFilter">
+              <option value="all" selected>All Cities</option>
+              <option value="Pune">Pune</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Bangalore">Bangalore</option>
+            </select>
+          </div>
+          <div class="topbar-actions">
+            <input
+              type="search"
+              id="globalSearch"
+              class="topbar-search"
+              placeholder="Search properties, leads, users..."
+            />
+            <button class="icon-button" title="Notifications">
+              <span class="icon-dot"></span>
+              <span>Alerts</span>
+            </button>
+            <span class="topbar-user">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <section class="admin-content">
+
+        <!-- Dashboard Overview -->
+        <div class="view view-dashboard" data-view="dashboard">
+          <!-- Global KPI row -->
+          <div class="cards-row cards-row-main">
+            <div class="stat-card">
+              <span class="stat-label">Total Properties</span>
+              <span class="stat-value" id="statProperties">0</span>
+              <span class="stat-sub" id="statActiveProperties">Active: 0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Leads (Last 30 days)</span>
+              <span class="stat-value" id="statLeads">0</span>
+              <span class="stat-sub" id="statNewLeads">New today: 0</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">New Users</span>
+              <span class="stat-value" id="statUsers">0</span>
+              <span class="stat-sub" id="statBuyerUsers">Buyers: 0</span>
+            </div>
+            <div class="stat-card accent">
+              <span class="stat-label">Conversion Rate (Dummy)</span>
+              <span class="stat-value" id="statConversion">3.4%</span>
+              <span class="stat-sub">From lead &rarr; booking</span>
+            </div>
+          </div>
+
+          <!-- Analytics style charts / cards -->
+          <div class="analytics-grid">
+            <!-- Revenue / Bookings -->
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Revenue (Dummy)</h3>
+              </div>
+              <div class="panel-body analytics-body">
+                <div class="analytics-row-top">
+                  <div>
+                    <div class="analytics-label">This week</div>
+                    <div class="analytics-main-value" id="revenueTotal">
+                      ₹96,437
+                    </div>
+                    <div class="analytics-chip positive">
+                      <span id="revenueChange">+18.4%</span>
+                      <span>vs last week</span>
+                    </div>
+                  </div>
+                  <div class="analytics-mini">
+                    <div>Avg ticket</div>
+                    <strong id="revenueAvg">₹8.4L</strong>
+                  </div>
+                </div>
+                <div class="bar-chart">
+                  <div class="bar" data-revenue-bar data-label="Mon"></div>
+                  <div class="bar" data-revenue-bar data-label="Tue"></div>
+                  <div class="bar" data-revenue-bar data-label="Wed"></div>
+                  <div class="bar" data-revenue-bar data-label="Thu"></div>
+                  <div class="bar highlight" data-revenue-bar data-label="Fri"></div>
+                  <div class="bar" data-revenue-bar data-label="Sat"></div>
+                  <div class="bar" data-revenue-bar data-label="Sun"></div>
+                </div>
+                <div class="bar-chart-labels">
+                  <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span
+                  ><span>Fri</span><span>Sat</span><span>Sun</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- User reach / activity -->
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>User Reach &amp; Engagement</h3>
+              </div>
+              <div class="panel-body analytics-body">
+                <div class="analytics-row-top">
+                  <div>
+                    <div class="analytics-label">Active users</div>
+                    <div class="analytics-main-value" id="reachUsers">0</div>
+                  </div>
+                  <div class="analytics-mini">
+                    <div>Saved properties</div>
+                    <strong id="reachSaves">32</strong>
+                  </div>
+                </div>
+                <div class="sparkline" id="reachSparkline">
+                  <!-- JS will draw tiny bars -->
+                </div>
+                <div class="sparkline-legend">
+                  <span>Last 7 days</span>
+                  <span id="reachChange" class="positive">+12.5%</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- City performance -->
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>City Performance</h3>
+              </div>
+              <div class="panel-body analytics-body">
+                <div class="hbar-row">
+                  <div class="hbar-label">Pune</div>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" data-city-bar="Pune"></div>
+                  </div>
+                  <span class="hbar-value" id="cityPuneValue">0</span>
+                </div>
+                <div class="hbar-row">
+                  <div class="hbar-label">Mumbai</div>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" data-city-bar="Mumbai"></div>
+                  </div>
+                  <span class="hbar-value" id="cityMumbaiValue">0</span>
+                </div>
+                <div class="hbar-row">
+                  <div class="hbar-label">Bangalore</div>
+                  <div class="hbar-track">
+                    <div class="hbar-fill" data-city-bar="Bangalore"></div>
+                  </div>
+                  <span class="hbar-value" id="cityBangaloreValue">0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="dashboard-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Recent Leads</h3>
+                <button class="btn-secondary btn-sm" data-view-jump="leads">
+                  View all
+                </button>
+              </div>
+              <div class="panel-body">
+                <table class="admin-table compact">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Phone</th>
+                      <th>City</th>
+                      <th>Interest</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentLeadsBody">
+                    <!-- JS will populate -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Recent Properties</h3>
+                <button class="btn-primary btn-sm" data-view-jump="properties">
+                  + Add Property
+                </button>
+              </div>
+              <div class="panel-body">
+                <ul class="recent-list" id="recentPropertiesList">
+                  <!-- JS will populate -->
+                </ul>
+
+                <div class="quick-actions">
+                  <span>Quick actions:</span>
+                  <button class="btn-secondary btn-sm" data-view-jump="properties">
+                    View all properties
+                  </button>
+                  <button class="btn-secondary btn-sm" data-view-jump="leads">
+                    Add manual lead
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Today’s Activity Timeline</h3>
+              </div>
+              <div class="panel-body">
+                <ul class="timeline-list">
+                  <li>
+                    <span class="timeline-time">10:24 AM</span>
+                    <div class="timeline-main">
+                      <strong>New lead added</strong>
+                      <span class="timeline-meta">Priya from Kharadi interested in 2BHK</span>
+                    </div>
+                    <span class="timeline-tag status-new">Lead</span>
+                  </li>
+                  <li>
+                    <span class="timeline-time">09:55 AM</span>
+                    <div class="timeline-main">
+                      <strong>Site visit scheduled</strong>
+                      <span class="timeline-meta">Bavdhan Heights &mdash; 2 visitors</span>
+                    </div>
+                    <span class="timeline-tag status-visit">Visit</span>
+                  </li>
+                  <li>
+                    <span class="timeline-time">09:12 AM</span>
+                    <div class="timeline-main">
+                      <strong>Property updated</strong>
+                      <span class="timeline-meta">Marked Kharadi Elite as "High Demand"</span>
+                    </div>
+                    <span class="timeline-tag status-update">Update</span>
+                  </li>
+                  <li>
+                    <span class="timeline-time">08:41 AM</span>
+                    <div class="timeline-main">
+                      <strong>New user signup</strong>
+                      <span class="timeline-meta">Rohit (Buyer) from Mumbai</span>
+                    </div>
+                    <span class="timeline-tag status-user">User</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Futuristic operational view -->
+          <div class="dashboard-grid dashboard-grid-wide">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Lead-to-Booking Funnel (Dummy)</h3>
+              </div>
+              <div class="panel-body funnel-body">
+                <div class="funnel-step">
+                  <div class="funnel-label">
+                    <span>Website Visitors</span>
+                    <strong>24,320</strong>
+                  </div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill level-1"></div>
+                  </div>
+                  <span class="funnel-meta">100%</span>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-label">
+                    <span>Leads Captured</span>
+                    <strong>1,482</strong>
+                  </div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill level-2"></div>
+                  </div>
+                  <span class="funnel-meta">6.1%</span>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-label">
+                    <span>Site Visits</span>
+                    <strong>274</strong>
+                  </div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill level-3"></div>
+                  </div>
+                  <span class="funnel-meta">18.4%</span>
+                </div>
+                <div class="funnel-step">
+                  <div class="funnel-label">
+                    <span>Bookings</span>
+                    <strong>48</strong>
+                  </div>
+                  <div class="funnel-bar">
+                    <div class="funnel-fill level-4"></div>
+                  </div>
+                  <span class="funnel-meta">17.5%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Upcoming Site Visits (Dummy)</h3>
+                <button class="btn-secondary btn-sm">View calendar</button>
+              </div>
+              <div class="panel-body">
+                <table class="admin-table compact">
+                  <thead>
+                    <tr>
+                      <th>Time</th>
+                      <th>Lead</th>
+                      <th>Property</th>
+                      <th>City</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Today, 4:30 PM</td>
+                      <td>Akash</td>
+                      <td>Bavdhan Hills</td>
+                      <td>Pune</td>
+                    </tr>
+                    <tr>
+                      <td>Today, 6:00 PM</td>
+                      <td>Sneha</td>
+                      <td>Panvel Greens</td>
+                      <td>Mumbai</td>
+                    </tr>
+                    <tr>
+                      <td>Tomorrow, 11:00 AM</td>
+                      <td>Rahul</td>
+                      <td>Whitefield Meadows</td>
+                      <td>Bangalore</td>
+                    </tr>
+                    <tr>
+                      <td>Tomorrow, 3:15 PM</td>
+                      <td>Anjali</td>
+                      <td>Kharadi Elite</td>
+                      <td>Pune</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Smart Suggestions (Dummy)</h3>
+              </div>
+              <div class="panel-body suggestions-body">
+                <ul class="suggestions-list">
+                  <li>
+                    <div>
+                      <strong>Highlight Kharadi properties this week</strong>
+                      <p>Leads from Kharadi are 32% higher than other localities in Pune.</p>
+                    </div>
+                    <button class="btn-secondary btn-sm">Mark as Done</button>
+                  </li>
+                  <li>
+                    <div>
+                      <strong>Follow up on pending site visits</strong>
+                      <p>8 leads completed site visits in the last 3 days, but status not updated.</p>
+                    </div>
+                    <button class="btn-secondary btn-sm">View leads</button>
+                  </li>
+                  <li>
+                    <div>
+                      <strong>Promote "High Demand" projects</strong>
+                      <p>3 projects are tagged High Demand with &gt; 50 saved properties.</p>
+                    </div>
+                    <button class="btn-secondary btn-sm">View projects</button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Productivity & control center -->
+          <div class="dashboard-grid dashboard-grid-control">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>My Tasks (Dummy)</h3>
+                <button class="btn-secondary btn-sm">View all</button>
+              </div>
+              <div class="panel-body">
+                <ul class="task-list">
+                  <li>
+                    <label>
+                      <input type="checkbox" />
+                      <span>Call back 5 new Mumbai leads</span>
+                    </label>
+                    <span class="task-tag priority-high">Today</span>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" />
+                      <span>Update pricing for Bavdhan Hills project</span>
+                    </label>
+                    <span class="task-tag priority-medium">This week</span>
+                  </li>
+                  <li>
+                    <label>
+                      <input type="checkbox" />
+                      <span>Review 12 new property submissions</span>
+                    </label>
+                    <span class="task-tag priority-low">Backlog</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Team Performance Snapshot (Dummy)</h3>
+              </div>
+              <div class="panel-body">
+                <table class="admin-table compact">
+                  <thead>
+                    <tr>
+                      <th>Agent</th>
+                      <th>Leads</th>
+                      <th>Site Visits</th>
+                      <th>Closures</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Rohit</td>
+                      <td>42</td>
+                      <td>18</td>
+                      <td>6</td>
+                    </tr>
+                    <tr>
+                      <td>Neha</td>
+                      <td>35</td>
+                      <td>14</td>
+                      <td>5</td>
+                    </tr>
+                    <tr>
+                      <td>Imran</td>
+                      <td>27</td>
+                      <td>11</td>
+                      <td>3</td>
+                    </tr>
+                    <tr>
+                      <td>Ankita</td>
+                      <td>31</td>
+                      <td>9</td>
+                      <td>4</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-header">
+                <h3>System Health (Dummy)</h3>
+              </div>
+              <div class="panel-body system-health-body">
+                <div class="health-row">
+                  <span>API Latency</span>
+                  <div class="health-bar">
+                    <div class="health-fill good"></div>
+                  </div>
+                  <span class="health-meta">132 ms</span>
+                </div>
+                <div class="health-row">
+                  <span>Form Conversions</span>
+                  <div class="health-bar">
+                    <div class="health-fill warning"></div>
+                  </div>
+                  <span class="health-meta">Slightly below avg</span>
+                </div>
+                <div class="health-row">
+                  <span>WhatsApp Response Rate</span>
+                  <div class="health-bar">
+                    <div class="health-fill good"></div>
+                  </div>
+                  <span class="health-meta">92%</span>
+                </div>
+                <div class="health-row">
+                  <span>Task Backlog</span>
+                  <div class="health-bar">
+                    <div class="health-fill critical"></div>
+                  </div>
+                  <span class="health-meta">Need attention</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Properties View -->
+        <div class="view view-properties hidden" data-view="properties">
+          <div class="view-header">
+            <h2>Properties</h2>
+            <button class="btn-primary" id="btnOpenPropertyForm">
+              + Add Property
+            </button>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Total listings</div>
+              <div class="kpi-main" id="kpiPropsTotal">0</div>
+              <div class="kpi-sub" id="kpiPropsFeatured">0 featured</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Active listings</div>
+              <div class="kpi-main" id="kpiPropsActive">0</div>
+              <div class="kpi-sub" id="kpiPropsCityTop">Top city: -</div>
+            </div>
+          </div>
+
+          <div class="mini-analytics-grid">
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Property Types</h3>
+              </div>
+              <div class="panel-body analytics-body" id="propTypeBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Property Status</h3>
+              </div>
+              <div class="panel-body analytics-body" id="propStatusBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="admin-table" id="propertiesTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Project</th>
+                  <th>City</th>
+                  <th>Locality</th>
+                  <th>Type</th>
+                  <th>BHK</th>
+                  <th>Area (sqft)</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Tag</th>
+                  <th>Featured</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Rows JS se populate honge -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Leads View -->
+        <div class="view view-leads hidden" data-view="leads">
+          <div class="view-header">
+            <h2>Leads</h2>
+            <button class="btn-primary" id="btnOpenLeadForm">
+              + Add Lead
+            </button>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Total leads</div>
+              <div class="kpi-main" id="kpiLeadsTotal">0</div>
+              <div class="kpi-sub" id="kpiLeadsNew">0 new today</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Site visits</div>
+              <div class="kpi-main" id="kpiLeadsVisits">0</div>
+              <div class="kpi-sub" id="kpiLeadsClosed">Closed: 0</div>
+            </div>
+          </div>
+
+          <div class="mini-analytics-grid">
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Lead Status</h3>
+              </div>
+              <div class="panel-body analytics-body" id="leadStatusBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Leads by City</h3>
+              </div>
+              <div class="panel-body analytics-body" id="leadCityBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="admin-table" id="leadsTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>City</th>
+                  <th>Interest</th>
+                  <th>Status</th>
+                  <th>Source</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS se populate hoga -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Users View -->
+        <div class="view view-users hidden" data-view="users">
+          <div class="view-header">
+            <h2>Users</h2>
+          </div>
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Total users</div>
+              <div class="kpi-main" id="kpiUsersTotal">0</div>
+              <div class="kpi-sub" id="kpiUsersBuyers">Buyers: 0</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Cities covered</div>
+              <div class="kpi-main" id="kpiUsersCities">0</div>
+              <div class="kpi-sub" id="kpiUsersTopCity">Top city: -</div>
+            </div>
+          </div>
+          <div class="mini-analytics-grid">
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>User Types</h3>
+              </div>
+              <div class="panel-body analytics-body" id="userTypeBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+            <div class="panel analytics-panel">
+              <div class="panel-header">
+                <h3>Users by City</h3>
+              </div>
+              <div class="panel-body analytics-body" id="userCityBars">
+                <!-- JS will populate -->
+              </div>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="admin-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>City</th>
+                  <th>Type</th>
+                  <th>Signup</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- JS se populate hoga -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Settings View (placeholder) -->
+        <div class="view view-settings hidden" data-view="settings">
+          <div class="view-header">
+            <h2>Settings</h2>
+          </div>
+          <div class="settings-grid">
+            <div class="panel">
+              <div class="panel-header">
+                <h3>Site Settings</h3>
+              </div>
+              <div class="panel-body settings-body">
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Site Name</div>
+                    <div class="settings-value">Bhoomi Plots &amp; Land</div>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Primary Location</div>
+                    <div class="settings-value">Pune, Maharashtra, India</div>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Contact Phone</div>
+                    <div class="settings-value">+91-98765 43210</div>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Contact Email</div>
+                    <div class="settings-value">info@bhoomiplots.in</div>
+                  </div>
+                </div>
+                <div class="settings-row">
+                  <div>
+                    <div class="settings-label">Footer Text</div>
+                    <div class="settings-value">
+                      Bhoomi Plots &amp; Land is your trusted partner for NA plots,
+                      farm lands, and residential projects in Maharashtra and across India.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+           
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Add/Edit Property Modal -->
+  <div class="modal-backdrop hidden" id="propertyModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="propertyModalTitle">Add Property</h3>
+        <button class="modal-close" id="btnClosePropertyModal">&times;</button>
+      </div>
+      <form class="modal-form" id="propertyForm">
+        <div class="form-row">
+          <label>
+            Title
+            <input type="text" name="title" required />
+          </label>
+          <label>
+            City
+            <input type="text" name="city" required />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Locality / Area
+            <input type="text" name="locality" placeholder="Kharadi, Baner, Bavdhan" />
+          </label>
+          <label>
+            Project Name
+            <input type="text" name="project" placeholder="Kharadi Heights" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Type
+            <select name="type" required>
+              <option value="Apartment">Apartment</option>
+              <option value="Villa">Villa</option>
+              <option value="Plot/Land">Plot/Land</option>
+              <option value="Commercial">Commercial</option>
+            </select>
+          </label>
+          <label>
+            BHK
+            <input type="number" name="bhk" min="1" max="10" step="1" placeholder="2" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Area (sqft)
+            <input type="number" name="area" min="0" step="1" placeholder="895" />
+          </label>
+          <label>
+            Price (text)
+            <input type="text" name="price" placeholder="₹ 45L – 75L" required />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Status
+            <select name="status" required>
+              <option value="Active">Active</option>
+              <option value="Draft">Draft</option>
+              <option value="Sold Out">Sold Out</option>
+            </select>
+          </label>
+          <label>
+            Tag
+            <select name="tag">
+              <option value="">Normal</option>
+              <option value="Featured">Featured</option>
+              <option value="High Demand">High Demand</option>
+              <option value="New Launch">New Launch</option>
+            </select>
+          </label>
+          <label class="checkbox-inline">
+            <input type="checkbox" name="featured" />
+            <span>Featured on Homepage</span>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="btnCancelProperty">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary">
+            Save Property
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add Lead Modal -->
+  <div class="modal-backdrop hidden" id="leadModalBackdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Add Lead</h3>
+        <button class="modal-close" id="btnCloseLeadModal">&times;</button>
+      </div>
+      <form class="modal-form" id="leadForm">
+        <div class="form-row">
+          <label>
+            Name
+            <input type="text" name="name" required />
+          </label>
+          <label>
+            Phone
+            <input type="text" name="phone" required />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            City
+            <input type="text" name="city" />
+          </label>
+          <label>
+            Interest
+            <input type="text" name="interest" placeholder="2 BHK in Kharadi" />
+          </label>
+        </div>
+
+        <div class="form-row">
+          <label>
+            Status
+            <select name="status">
+              <option value="New">New</option>
+              <option value="In Contact">In Contact</option>
+              <option value="Site Visit">Site Visit</option>
+              <option value="Closed - Won">Closed - Won</option>
+              <option value="Closed - Lost">Closed - Lost</option>
+            </select>
+          </label>
+          <label>
+            Source
+            <input type="text" name="source" placeholder="Homepage, Bavdhan property" />
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="btnCancelLead">
+            Cancel
+          </button>
+          <button type="submit" class="btn-primary">
+            Save Lead
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin-dashboard.js"></script>
+</body>
+</html>
+
+
