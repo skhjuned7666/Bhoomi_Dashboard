@@ -242,8 +242,9 @@ const state = {
   const partnerRevenueEl = document.getElementById("partner-revenue");
   const partnerTableBody = document.getElementById("partner-table-body");
   
-  // Settings
+  // Settings / logout
   const btnLogout = document.getElementById("btn-logout");
+  const btnLogoutIcon = document.getElementById("btn-logout-icon");
   const btnResetDemo = document.getElementById("btn-reset-demo");
   const toastContainer = document.getElementById("toast-container");
 
@@ -936,11 +937,15 @@ const state = {
   }
 
   // Simple logout: send user back to login screen
-  if (btnLogout) {
-    btnLogout.addEventListener("click", () => {
+  function wireLogoutButton(button) {
+    if (!button) return;
+    button.addEventListener("click", () => {
       window.location.href = "login.html";
     });
   }
+
+  wireLogoutButton(btnLogout);
+  wireLogoutButton(btnLogoutIcon);
 
   // Detail drawer events
   if (btnDetailClose) {
@@ -1007,5 +1012,14 @@ const state = {
       if (document.getElementById("salesChart")) {
         updateSalesChart();
       }
+    }
+
+    // Mobile sidebar toggle
+    const sidebar = document.querySelector(".sidebar");
+    const menuToggle = document.querySelector(".menu-toggle");
+    if (sidebar && menuToggle) {
+      menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("sidebar--open");
+      });
     }
   });
