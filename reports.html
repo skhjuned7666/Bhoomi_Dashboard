@@ -4,7 +4,7 @@
   <!-- Meta -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bhoomi-Plots Admin Dashboard</title>
+  <title>Bhoomi-Plots · Reports</title>
 
   <!-- Google Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -17,7 +17,7 @@
   <!-- Styles -->
   <link rel="stylesheet" href="assets/style.css" />
 
-  <!-- Chart.js (for graphs) -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -33,7 +33,7 @@
       </div>
 
       <nav class="sidebar__nav">
-        <a href="index.html" class="sidebar__link sidebar__link--active">
+        <a href="index.html" class="sidebar__link">
           <span class="icon">📊</span>
           <span>Dashboard</span>
         </a>
@@ -41,7 +41,7 @@
           <span class="icon">🏠</span>
           <span>Properties</span>
         </a>
-        <a href="reports.html" class="sidebar__link">
+        <a href="reports.html" class="sidebar__link sidebar__link--active">
           <span class="icon">📈</span>
           <span>Reports</span>
         </a>
@@ -66,17 +66,19 @@
       <!-- Top Header -->
       <header class="main__header">
         <div>
-          <h2 class="main__title">Dashboard Overview</h2>
-          <p class="main__subtitle">Realtime snapshot of Bhoomi-Plots performance</p>
+          <h2 class="main__title">Reports & Analytics</h2>
+          <p class="main__subtitle">
+            Visual overview of sales and category-wise performance
+          </p>
         </div>
         <div class="main__actions">
           <input
             type="search"
             class="search-input"
-            placeholder="Search properties, partners..."
+            placeholder="Search reports (demo only)..."
           />
-          <button id="btn-export" class="btn btn--primary-outline" type="button">
-            Export
+          <button class="btn btn--primary-outline" type="button" disabled>
+            Export Reports
           </button>
           <div class="user-badge">
             <span class="user-badge__avatar">A</span>
@@ -88,80 +90,39 @@
         </div>
       </header>
 
-      <!-- DASHBOARD SECTION -->
-      <section id="dashboard" class="section section--active">
-        <!-- Top Stats -->
-        <div class="cards-grid cards-grid--4">
-          <!-- Total Properties -->
+      <!-- REPORTS SECTION -->
+      <section id="reports" class="section section--active">
+        <div class="cards-grid cards-grid--3">
           <article class="card card--stat">
-            <div class="card__header">
-              <h3 class="card__title">Total Properties</h3>
-              <span class="chip chip--blue">All</span>
-            </div>
-            <p class="card__value" id="stat-total-properties">0</p>
-            <p class="card__meta" id="stat-total-properties-meta">
-              +0 from last month
-            </p>
+            <h3 class="card__title">Category Split</h3>
+            <p class="card__value" id="stat-category-total">0</p>
+            <p class="card__meta">Total listed across all categories</p>
           </article>
-
-          <!-- Total Sales -->
           <article class="card card--stat">
-            <div class="card__header">
-              <h3 class="card__title">Total Sales</h3>
-              <span class="chip chip--green">₹</span>
-            </div>
-            <p class="card__value" id="stat-total-sales">₹0</p>
-            <p class="card__meta" id="stat-total-sales-meta">
-              +0% vs last month
-            </p>
+            <h3 class="card__title">Avg Ticket Size</h3>
+            <p class="card__value" id="stat-avg-ticket">₹0</p>
+            <p class="card__meta">Approx. average price per property</p>
           </article>
-
-          <!-- Active Listings -->
           <article class="card card--stat">
-            <div class="card__header">
-              <h3 class="card__title">Active Listings</h3>
-              <span class="chip chip--orange">Live</span>
-            </div>
-            <p class="card__value" id="stat-active-listings">0</p>
-            <p class="card__meta" id="stat-active-listings-meta">
-              0 new this week
-            </p>
-          </article>
-
-          <!-- Pending Requests -->
-          <article class="card card--stat">
-            <div class="card__header">
-              <h3 class="card__title">Pending Requests</h3>
-              <span class="chip chip--red">!</span>
-            </div>
-            <p class="card__value" id="stat-pending-requests">0</p>
-            <p class="card__meta" id="stat-pending-requests-meta">
-              0 approvals required
-            </p>
+            <h3 class="card__title">Conversion Rate</h3>
+            <p class="card__value" id="stat-conversion">0%</p>
+            <p class="card__meta">Bookings / Inquiries (demo)</p>
           </article>
         </div>
 
-        <!-- Charts & Recent Activity -->
         <div class="layout-2col">
           <article class="card card--chart">
             <div class="card__header">
-              <h3 class="card__title">Sales & Bookings (Last 12 Months)</h3>
-              <select id="chart-filter" class="select">
-                <option value="sales">Sales</option>
-                <option value="bookings">Bookings</option>
-              </select>
+              <h3 class="card__title">Category-wise Properties</h3>
             </div>
-            <canvas id="salesChart"></canvas>
+            <canvas id="categoryChart"></canvas>
           </article>
 
-          <article class="card card--activity">
+          <article class="card card--chart">
             <div class="card__header">
-              <h3 class="card__title">Recent Activities</h3>
-              <span class="card__meta">Last 24 hours</span>
+              <h3 class="card__title">Yearly Performance (Sales)</h3>
             </div>
-            <ul class="activity-list" id="activity-list">
-              <!-- Filled by JS -->
-            </ul>
+            <canvas id="yearlyChart"></canvas>
           </article>
         </div>
       </section>
@@ -175,3 +136,5 @@
   <script src="assets/script.js"></script>
 </body>
 </html>
+
+

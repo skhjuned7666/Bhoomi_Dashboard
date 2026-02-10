@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhoomi-Plots Admin Login</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles (reuse dashboard theme) -->
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body class="auth-body">
+  <main class="auth">
+    <div class="auth__card">
+      <div class="auth__brand">
+        <img
+          src="assets/bhoomi-logo-white-1-1536x526.png"
+          alt="Bhoomi-Plots logo"
+          class="auth__logo-img"
+        />
+        
+      </div>
+
+      <form id="login-form" class="auth__form">
+        <h2 class="auth__form-title">Sign in to dashboard</h2>
+        <p class="auth__form-subtitle">
+          Use demo credentials to continue. No real backend is connected.
+        </p>
+
+        <div class="auth__field">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="admin@bhoomi-plots.in"
+            required
+          />
+        </div>
+
+        <div class="auth__field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+          />
+        </div>
+
+        <div class="auth__meta-row">
+          <label class="auth__checkbox">
+            <input type="checkbox" id="remember" />
+            <span>Remember me</span>
+          </label>
+          <button type="button" class="auth__link" disabled>
+            Forgot password?
+          </button>
+        </div>
+
+        <button type="submit" class="btn btn--primary auth__submit">
+          Continue to Dashboard
+        </button>
+
+        <p class="auth__hint">
+          Demo only – try <strong>admin@bhoomi-plots.in</strong> / any password.
+        </p>
+        <p class="auth__hint auth__hint--small">
+          By continuing you agree to the demo terms of use.
+        </p>
+      </form>
+    </div>
+
+    <section class="auth__side">
+      <div class="auth__side-chip">Real Estate Intelligence</div>
+      <h2 class="auth__side-title">Visualize every plot, land and project in one place.</h2>
+      <p class="auth__side-text">
+        Bhoomi-Plots gives you a single pane of glass for plots, lands, residential and partner inventory.
+        This login screen is purely client-side with static demo data.
+      </p>
+      <ul class="auth__side-list">
+        <li>Category-wise inventory overview</li>
+        <li>Sales & bookings trendlines</li>
+        <li>Partner property tracking</li>
+      </ul>
+    </section>
+  </main>
+
+  <script src="assets/login.js"></script>
+</body>
+</html>
+
+

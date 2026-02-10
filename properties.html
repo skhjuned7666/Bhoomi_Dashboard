@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhoomi-Plots · Properties</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <!-- Chart.js (for graphs, reused for reports page too) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <img
+          src="assets/bhoomi-logo-white-1-1536x526.png"
+          alt="Bhoomi-Plots Smart Admin"
+          class="sidebar__logo-img"
+        />
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="index.html" class="sidebar__link">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="properties.html" class="sidebar__link sidebar__link--active">
+          <span class="icon">🏠</span>
+          <span>Properties</span>
+        </a>
+        <a href="reports.html" class="sidebar__link">
+          <span class="icon">📈</span>
+          <span>Reports</span>
+        </a>
+        <a href="partners.html" class="sidebar__link">
+          <span class="icon">🤝</span>
+          <span>Partners</span>
+        </a>
+        <a href="settings.html" class="sidebar__link">
+          <span class="icon">⚙️</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <p class="sidebar__footer-user-main">Admin</p>
+        <p class="sidebar__footer-user-sub">admin@bhoomi-plots.in</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Top Header -->
+      <header class="main__header">
+        <div>
+          <h2 class="main__title">Property Management</h2>
+          <p class="main__subtitle">All listings across Bhoomi-Plots inventory</p>
+        </div>
+        <div class="main__actions">
+          <input
+            type="search"
+            class="search-input"
+            placeholder="Search properties..."
+          />
+          <button id="btn-export" class="btn btn--primary-outline" type="button">
+            Export
+          </button>
+          <div class="user-badge">
+            <span class="user-badge__avatar">A</span>
+            <span class="user-badge__name">Admin</span>
+          </div>
+          <button id="btn-logout" class="btn btn--ghost btn--logout" type="button">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- PROPERTIES SECTION -->
+      <section id="properties" class="section section--active">
+        <div class="section__header section__header--actions">
+          <button id="btn-open-form" class="btn btn--primary">+ Add Property</button>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="tabs">
+          <button class="tab tab--active" data-category="plots">Plots</button>
+          <button class="tab" data-category="lands">Lands</button>
+          <button class="tab" data-category="residential">Residential</button>
+          <button class="tab" data-category="partner">Partner Properties</button>
+        </div>
+
+        <!-- Quick summary -->
+        <div class="cards-grid cards-grid--4 cards-grid--compact">
+          <article class="card card--mini">
+            <h4>Plots</h4>
+            <p id="count-plots">0</p>
+          </article>
+          <article class="card card--mini">
+            <h4>Lands</h4>
+            <p id="count-lands">0</p>
+          </article>
+          <article class="card card--mini">
+            <h4>Residential</h4>
+            <p id="count-residential">0</p>
+          </article>
+          <article class="card card--mini">
+            <h4>Partner</h4>
+            <p id="count-partner">0</p>
+          </article>
+        </div>
+
+        <!-- Filters -->
+        <div class="property-filters">
+          <div class="property-filters__group">
+            <label for="filter-status">Status</label>
+            <select id="filter-status">
+              <option value="all">All</option>
+              <option value="Active">Active</option>
+              <option value="Pending">Pending</option>
+              <option value="Sold">Sold</option>
+            </select>
+          </div>
+
+          <div class="property-filters__group">
+            <label for="filter-min-price">Min price (₹)</label>
+            <input id="filter-min-price" type="number" min="0" placeholder="Any" />
+          </div>
+
+          <div class="property-filters__group">
+            <label for="filter-max-price">Max price (₹)</label>
+            <input id="filter-max-price" type="number" min="0" placeholder="Any" />
+          </div>
+
+          <button type="button" id="filter-reset" class="btn btn--ghost property-filters__reset">
+            Clear filters
+          </button>
+        </div>
+
+        <!-- Add / Edit Form (inline modal style) -->
+        <div id="property-form-wrapper" class="property-form-wrapper property-form-wrapper--hidden">
+          <form id="property-form" class="property-form">
+            <div class="property-form__header">
+              <h3 id="property-form-title">Add New Property</h3>
+              <button type="button" id="btn-close-form" class="btn-icon" aria-label="Close form">✕</button>
+            </div>
+
+            <div class="property-form__grid">
+              <div class="form-group">
+                <label for="property-title">Title</label>
+                <input id="property-title" name="title" type="text" required />
+              </div>
+
+              <div class="form-group">
+                <label for="property-category">Category</label>
+                <select id="property-category" name="category" required>
+                  <option value="plots">Plots</option>
+                  <option value="lands">Lands</option>
+                  <option value="residential">Residential</option>
+                  <option value="partner">Partner</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="property-location">Location</label>
+                <input id="property-location" name="location" type="text" required />
+              </div>
+
+              <div class="form-group">
+                <label for="property-price">Price (₹)</label>
+                <input id="property-price" name="price" type="number" min="0" required />
+              </div>
+
+              <div class="form-group">
+                <label for="property-status">Status</label>
+                <select id="property-status" name="status" required>
+                  <option value="Active">Active</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Sold">Sold</option>
+                </select>
+              </div>
+
+              <div class="form-group form-group--full">
+                <label for="property-description">Description</label>
+                <textarea
+                  id="property-description"
+                  name="description"
+                  rows="2"
+                  placeholder="Short description..."
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="property-form__footer">
+              <button type="button" class="btn btn--ghost" id="btn-reset-form">Reset</button>
+              <div class="property-form__footer-right">
+                <button type="button" class="btn btn--ghost" id="btn-cancel-form">Cancel</button>
+                <button type="submit" class="btn btn--primary" id="btn-save-form">Save Property</button>
+              </div>
+            </div>
+
+            <!-- Hidden field to know when we are editing -->
+            <input type="hidden" id="property-id" />
+          </form>
+        </div>
+
+        <!-- Properties Table -->
+        <article class="card card--table">
+          <div class="card__header">
+            <h3 class="card__title">Listings</h3>
+            <p class="card__meta" id="properties-table-meta">0 properties</p>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Title</th>
+                  <th>Location</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Status</th>
+                  <th>Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="properties-table-body">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+        </article>
+
+        <!-- Property Detail Drawer -->
+        <aside id="property-detail" class="detail-drawer detail-drawer--hidden" aria-hidden="true">
+          <div class="detail-drawer__panel">
+            <header class="detail-drawer__header">
+              <div>
+                <p class="detail-drawer__eyebrow">Property quick view</p>
+                <h3 id="detail-title" class="detail-drawer__title">Property title</h3>
+                <p id="detail-location" class="detail-drawer__location">Location</p>
+              </div>
+              <button
+                type="button"
+                id="btn-detail-close"
+                class="btn-icon detail-drawer__close"
+                aria-label="Close details"
+              >
+                ✕
+              </button>
+            </header>
+
+            <section class="detail-drawer__section detail-drawer__section--meta">
+              <div class="detail-meta-item">
+                <span class="detail-meta-label">Category</span>
+                <span id="detail-category" class="detail-meta-value">Plots</span>
+              </div>
+              <div class="detail-meta-item">
+                <span class="detail-meta-label">Status</span>
+                <span id="detail-status" class="detail-meta-value">Active</span>
+              </div>
+              <div class="detail-meta-item">
+                <span class="detail-meta-label">Price</span>
+                <span id="detail-price" class="detail-meta-value">₹0</span>
+              </div>
+              <div class="detail-meta-item">
+                <span class="detail-meta-label">Last Updated</span>
+                <span id="detail-updated" class="detail-meta-value">—</span>
+              </div>
+            </section>
+
+            <section class="detail-drawer__section">
+              <h4 class="detail-section-title">Description</h4>
+              <p id="detail-description" class="detail-description">
+                No description available for this property.
+              </p>
+            </section>
+
+            <section class="detail-drawer__section">
+              <h4 class="detail-section-title">Quick actions</h4>
+              <div class="detail-actions">
+                <button type="button" id="btn-detail-edit" class="btn btn--primary">
+                  Edit property
+                </button>
+                <button type="button" id="btn-detail-mark-sold" class="btn btn--ghost">
+                  Mark as Sold
+                </button>
+              </div>
+            </section>
+          </div>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- App JS -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
+
+

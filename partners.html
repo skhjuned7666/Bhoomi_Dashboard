@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Meta -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhoomi-Plots · Partners</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="assets/style.css" />
+
+  <!-- Chart.js (not required here but included for consistency) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="app">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <img
+          src="assets/bhoomi-logo-white-1-1536x526.png"
+          alt="Bhoomi-Plots Smart Admin"
+          class="sidebar__logo-img"
+        />
+      </div>
+
+      <nav class="sidebar__nav">
+        <a href="index.html" class="sidebar__link">
+          <span class="icon">📊</span>
+          <span>Dashboard</span>
+        </a>
+        <a href="properties.html" class="sidebar__link">
+          <span class="icon">🏠</span>
+          <span>Properties</span>
+        </a>
+        <a href="reports.html" class="sidebar__link">
+          <span class="icon">📈</span>
+          <span>Reports</span>
+        </a>
+        <a href="partners.html" class="sidebar__link sidebar__link--active">
+          <span class="icon">🤝</span>
+          <span>Partners</span>
+        </a>
+        <a href="settings.html" class="sidebar__link">
+          <span class="icon">⚙️</span>
+          <span>Settings</span>
+        </a>
+      </nav>
+
+      <div class="sidebar__footer">
+        <p class="sidebar__footer-user-main">Admin</p>
+        <p class="sidebar__footer-user-sub">admin@bhoomi-plots.in</p>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Top Header -->
+      <header class="main__header">
+        <div>
+          <h2 class="main__title">Partner Properties</h2>
+          <p class="main__subtitle">
+            Overview of channel partners, their listings and contribution
+          </p>
+        </div>
+        <div class="main__actions">
+          <input
+            type="search"
+            class="search-input"
+            placeholder="Search partners..."
+          />
+          <button class="btn btn--primary-outline" type="button" disabled>
+            Export Partners
+          </button>
+          <div class="user-badge">
+            <span class="user-badge__avatar">A</span>
+            <span class="user-badge__name">Admin</span>
+          </div>
+          <button id="btn-logout" class="btn btn--ghost btn--logout" type="button">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- PARTNERS SECTION -->
+      <section id="partners" class="section section--active">
+        <!-- Partner summary cards -->
+        <div class="cards-grid cards-grid--3">
+          <article class="card card--stat">
+            <h3 class="card__title">Total Partners</h3>
+            <p class="card__value" id="partner-total">0</p>
+            <p class="card__meta">Across all micro-markets</p>
+          </article>
+          <article class="card card--stat">
+            <h3 class="card__title">Partner Listings</h3>
+            <p class="card__value" id="partner-listings">0</p>
+            <p class="card__meta">Active partner-driven properties</p>
+          </article>
+          <article class="card card--stat">
+            <h3 class="card__title">Revenue Share</h3>
+            <p class="card__value" id="partner-revenue">0%</p>
+            <p class="card__meta">Approx. contribution via partners</p>
+          </article>
+        </div>
+
+        <!-- Partner table -->
+        <article class="card card--table partners-card">
+          <div class="card__header">
+            <h3 class="card__title">Key Channel Partners</h3>
+            <p class="card__meta">Static demo data – no live sync</p>
+          </div>
+
+          <div class="table-wrapper">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Partner</th>
+                  <th>City / Focus</th>
+                  <th>Tier</th>
+                  <th>Listings</th>
+                  <th>Active</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="partner-table-body">
+                <!-- Filled by JS -->
+              </tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- App JS -->
+  <script src="assets/script.js"></script>
+</body>
+</html>
+
+
