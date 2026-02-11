@@ -110,6 +110,7 @@
 
       <!-- REPORTS SECTION -->
       <section id="reports" class="section section--active">
+        <!-- Top Stats Row 1 -->
         <div class="cards-grid cards-grid--3">
           <article class="card card--stat">
             <h3 class="card__title">Category Split</h3>
@@ -128,19 +129,84 @@
           </article>
         </div>
 
-        <div class="layout-2col">
-          <article class="card card--chart">
+        <!-- Top Stats Row 2 -->
+        <div class="cards-grid cards-grid--3" style="margin-top: 12px;">
+          <article class="card card--stat">
+            <h3 class="card__title">Total Revenue</h3>
+            <p class="card__value" id="stat-total-revenue">₹0</p>
+            <p class="card__meta">All-time sales revenue</p>
+          </article>
+          <article class="card card--stat">
+            <h3 class="card__title">Monthly Growth</h3>
+            <p class="card__value" id="stat-monthly-growth">0%</p>
+            <p class="card__meta">Compared to last month</p>
+          </article>
+          <article class="card card--stat">
+            <h3 class="card__title">Active Bookings</h3>
+            <p class="card__value" id="stat-active-bookings">0</p>
+            <p class="card__meta">Currently in progress</p>
+          </article>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="layout-2col" style="margin-top: 14px;">
+          <article class="card card--chart card--chart-category">
             <div class="card__header">
               <h3 class="card__title">Category-wise Properties</h3>
             </div>
             <canvas id="categoryChart"></canvas>
           </article>
 
-          <article class="card card--chart">
+          <article class="card card--chart card--chart-yearly">
             <div class="card__header">
               <h3 class="card__title">Yearly Performance (Sales)</h3>
             </div>
             <canvas id="yearlyChart"></canvas>
+          </article>
+        </div>
+
+        <!-- Monthly Trend Chart -->
+        <div style="margin-top: 14px;">
+          <article class="card card--chart card--chart-monthly">
+            <div class="card__header">
+              <h3 class="card__title">Monthly Sales Trend</h3>
+            </div>
+            <canvas id="monthlyChart"></canvas>
+          </article>
+        </div>
+
+        <!-- Bottom Section: Recent Transactions & Top Categories -->
+        <div class="layout-2col" style="margin-top: 14px;">
+          <!-- Recent Transactions Table -->
+          <article class="card card--table">
+            <div class="card__header">
+              <h3 class="card__title">Recent Transactions</h3>
+            </div>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-transactions-body">
+                  <!-- Transactions will be populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- Top Performing Categories -->
+          <article class="card">
+            <div class="card__header">
+              <h3 class="card__title">Top Performing Categories</h3>
+            </div>
+            <div id="top-categories-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
+              <!-- Categories will be populated by JS -->
+            </div>
           </article>
         </div>
       </section>

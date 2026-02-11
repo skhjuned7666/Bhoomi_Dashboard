@@ -183,6 +183,81 @@
             </ul>
           </article>
         </div>
+
+        <!-- Extra Dashboard Content -->
+        <!-- Row 1: Recent Properties + Action Center -->
+        <div class="layout-2col">
+          <!-- Recent Properties -->
+          <article class="card card--table">
+            <div class="card__header">
+              <h3 class="card__title">Recent Properties</h3>
+              <span class="card__meta">Last updates</span>
+            </div>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Property</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="recent-properties-body">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </article>
+
+          <!-- Action Center -->
+          <article class="card">
+            <div class="card__header">
+              <h3 class="card__title">Action Center</h3>
+              <span class="card__meta">Things to review</span>
+            </div>
+            <ul id="action-center-list" class="action-list">
+              <!-- Filled by JS -->
+            </ul>
+          </article>
+        </div>
+
+        <!-- Row 2: Top Locations + Partner Snapshot -->
+        <div class="layout-2col">
+          <!-- Top Locations -->
+          <article class="card">
+            <div class="card__header">
+              <h3 class="card__title">Top Locations</h3>
+              <span class="card__meta">Based on active listings</span>
+            </div>
+            <div id="top-locations-list" class="pill-list">
+              <!-- Filled by JS -->
+            </div>
+          </article>
+
+          <!-- Partner Snapshot -->
+          <article class="card card--table">
+            <div class="card__header">
+              <h3 class="card__title">Partner Snapshot</h3>
+              <span class="card__meta">Top performing partners</span>
+            </div>
+            <div class="table-wrapper">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Partner</th>
+                    <th>Tier</th>
+                    <th>Active Listings</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="partner-snapshot-body">
+                  <!-- Filled by JS -->
+                </tbody>
+              </table>
+            </div>
+          </article>
+        </div>
       </section>
     </main>
   </div>

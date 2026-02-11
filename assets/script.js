@@ -235,12 +235,23 @@ const state = {
   const statCategoryTotalEl = document.getElementById("stat-category-total");
   const statAvgTicketEl = document.getElementById("stat-avg-ticket");
   const statConversionEl = document.getElementById("stat-conversion");
+  const statTotalRevenueEl = document.getElementById("stat-total-revenue");
+  const statMonthlyGrowthEl = document.getElementById("stat-monthly-growth");
+  const statActiveBookingsEl = document.getElementById("stat-active-bookings");
+  const recentTransactionsBody = document.getElementById("recent-transactions-body");
+  const topCategoriesList = document.getElementById("top-categories-list");
 
   // Partners
   const partnerTotalEl = document.getElementById("partner-total");
   const partnerListingsEl = document.getElementById("partner-listings");
   const partnerRevenueEl = document.getElementById("partner-revenue");
   const partnerTableBody = document.getElementById("partner-table-body");
+  const partnerSnapshotBodyEl = document.getElementById("partner-snapshot-body");
+
+  // Dashboard (index.html) extras
+  const actionCenterListEl = document.getElementById("action-center-list");
+  const topLocationsListEl = document.getElementById("top-locations-list");
+  const recentPropertiesBody = document.getElementById("recent-properties-body");
   
   // Settings / logout
   const btnLogout = document.getElementById("btn-logout");
@@ -265,6 +276,7 @@ const state = {
   let salesChartInstance;
   let categoryChartInstance;
   let yearlyChartInstance;
+  let monthlyChartInstance;
   
   // ----------------------
   // Rendering functions
@@ -306,6 +318,19 @@ const state = {
   
       const fakeConversion = 37.5; // static for demo
       statConversionEl.textContent = formatPercent(fakeConversion);
+    }
+    
+    // Additional reports stats
+    if (statTotalRevenueEl) {
+      statTotalRevenueEl.textContent = formatCurrency(metrics.totalSales);
+    }
+    if (statMonthlyGrowthEl) {
+      const monthlyGrowth = ((metrics.totalSales - metrics.previousSales) / metrics.previousSales) * 100;
+      statMonthlyGrowthEl.textContent = (monthlyGrowth >= 0 ? "+" : "") + monthlyGrowth.toFixed(1) + "%";
+    }
+    if (statActiveBookingsEl) {
+      const totalBookings = metrics.monthlyBookings.reduce((a, b) => a + b, 0);
+      statActiveBookingsEl.textContent = totalBookings;
     }
   }
   
@@ -458,7 +483,230 @@ const state = {
     });
   }
 
-  // Partners
+  // Recent Transactions (Reports page)
+  function renderRecentTransactions() {
+    if (!recentTransactionsBody) return;
+    
+    // Generate fake transaction data from properties
+    const transactions = state.properties
+      .filter(p => p.status === "Sold" || p.status === "Active")
+      .slice(0, 6)
+      .map(p => ({
+        title: p.title,
+        amount: p.price,
+        date: p.updatedAt,
+        status: p.status === "Sold" ? "Completed" : "Pending"
+      }));
+    
+    recentTransactionsBody.innerHTML = "";
+    
+    transactions.forEach((tx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${tx.title}</td>
+        <td>${formatCurrency(tx.amount)}</td>
+        <td>${tx.date}</td>
+        <td>
+          <span class="status-badge ${tx.status === "Completed" ? "status-badge--active" : "status-badge--pending"}">
+            ${tx.status}
+          </span>
+        </td>
+      `;
+      recentTransactionsBody.appendChild(tr);
+    });
+  }
+  
+  // Top Categories (Reports page)
+  function renderTopCategories() {
+    if (!topCategoriesList) return;
+    
+    const { categoryCounts, monthlySales } = state.metrics;
+    const categories = [
+      {
+        key: "plots",
+        name: "Plots",
+        count: categoryCounts.plots,
+        icon: "P",
+        value: formatCurrency(categoryCounts.plots * 4200000),
+        class: "category-item__icon--plots"
+      },
+      {
+        key: "residential",
+        name: "Residential",
+        count: categoryCounts.residential,
+        icon: "R",
+        value: formatCurrency(categoryCounts.residential * 9500000),
+        class: "category-item__icon--residential"
+      },
+      {
+        key: "lands",
+        name: "Lands",
+        count: categoryCounts.lands,
+        icon: "L",
+        value: formatCurrency(categoryCounts.lands * 7800000),
+        class: "category-item__icon--lands"
+      },
+      {
+        key: "partner",
+        name: "Partner",
+        count: categoryCounts.partner,
+        icon: "P",
+        value: formatCurrency(categoryCounts.partner * 12500000),
+        class: "category-item__icon--partner"
+      }
+    ].sort((a, b) => b.count - a.count);
+    
+    topCategoriesList.innerHTML = "";
+    
+    categories.forEach((cat) => {
+      const div = document.createElement("div");
+      div.className = "category-item";
+      div.innerHTML = `
+        <div class="category-item__left">
+          <div class="category-item__icon ${cat.class}">${cat.icon}</div>
+          <div class="category-item__info">
+            <span class="category-item__name">${cat.name}</span>
+            <span class="category-item__count">${cat.count} properties</span>
+          </div>
+        </div>
+        <div class="category-item__value">${cat.value}</div>
+      `;
+      topCategoriesList.appendChild(div);
+    });
+  }
+
+  // Dashboard - Recent Properties (index.html)
+  function renderRecentProperties() {
+    if (!recentPropertiesBody) return;
+
+    const recentProps = [...state.properties]
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      .slice(0, 5);
+
+    recentPropertiesBody.innerHTML = "";
+
+    recentProps.forEach((prop) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${prop.title}</td>
+        <td>${humanizeCategory(prop.category)}</td>
+        <td>${formatCurrency(prop.price)}</td>
+        <td>
+          <span class="status-badge ${statusClass(prop.status)}">
+            ${prop.status}
+          </span>
+        </td>
+      `;
+      recentPropertiesBody.appendChild(tr);
+    });
+  }
+
+  // Dashboard - Action Center (index.html)
+  function renderActionCenter() {
+    if (!actionCenterListEl) return;
+
+    const pendingProps = state.properties.filter((p) => p.status === "Pending");
+    const pausedPartners = (state.partners || []).filter((p) => p.status === "Paused");
+    const soldProps = state.properties.filter((p) => p.status === "Sold");
+
+    const items = [
+      {
+        title: "Review pending approvals",
+        meta: `${pendingProps.length} properties pending \u00b7 ${state.metrics.pendingRequests} requests`,
+        statusClass: pendingProps.length ? "status-badge--pending" : "status-badge--active",
+        statusText: pendingProps.length ? "Pending" : "Clear",
+      },
+      {
+        title: "Follow up on paused partners",
+        meta: `${pausedPartners.length} partners paused`,
+        statusClass: pausedPartners.length ? "status-badge--pending" : "status-badge--active",
+        statusText: pausedPartners.length ? "Needs review" : "OK",
+      },
+      {
+        title: "Verify sold listings documentation",
+        meta: `${soldProps.length} sold listings in records`,
+        statusClass: "status-badge--active",
+        statusText: "Track",
+      },
+      {
+        title: "Prepare weekly export",
+        meta: "Download CSV from Properties page",
+        statusClass: "status-badge--active",
+        statusText: "Ready",
+      },
+    ];
+
+    actionCenterListEl.innerHTML = "";
+
+    items.forEach((it) => {
+      const li = document.createElement("li");
+      li.className = "action-item";
+      li.innerHTML = `
+        <div class="action-item__main">
+          <div class="action-item__title">${it.title}</div>
+          <div class="action-item__meta">${it.meta}</div>
+        </div>
+        <span class="status-badge ${it.statusClass}">${it.statusText}</span>
+      `;
+      actionCenterListEl.appendChild(li);
+    });
+  }
+
+  // Dashboard - Top Locations (index.html)
+  function renderTopLocations() {
+    if (!topLocationsListEl) return;
+
+    const counts = new Map();
+    state.properties.forEach((p) => {
+      const raw = p.location || "";
+      const area = raw.split(",")[0].trim() || "Unknown";
+      counts.set(area, (counts.get(area) || 0) + 1);
+    });
+
+    const top = [...counts.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 8);
+
+    topLocationsListEl.innerHTML = "";
+    top.forEach(([area, count]) => {
+      const div = document.createElement("div");
+      div.className = "pill";
+      div.innerHTML = `
+        <span class="pill__label">${area}</span>
+        <span class="pill__count">${count}</span>
+      `;
+      topLocationsListEl.appendChild(div);
+    });
+  }
+
+  // Dashboard - Partner Snapshot (index.html)
+  function renderPartnerSnapshot() {
+    if (!partnerSnapshotBodyEl) return;
+
+    const partners = (state.partners || [])
+      .slice()
+      .sort((a, b) => (b.activeListings || 0) - (a.activeListings || 0))
+      .slice(0, 5);
+
+    partnerSnapshotBodyEl.innerHTML = "";
+
+    partners.forEach((p) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td style="max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${p.name}</td>
+        <td>${p.tier}</td>
+        <td>${p.activeListings}</td>
+        <td>
+          <span class="status-badge ${
+            p.status === "Active" ? "status-badge--active" : "status-badge--pending"
+          }">${p.status}</span>
+        </td>
+      `;
+      partnerSnapshotBodyEl.appendChild(tr);
+    });
+  }
+
+  // Partners (Partners page)
   function renderPartners() {
     if (!partnerTotalEl || !partnerTableBody) return;
 
@@ -584,6 +832,34 @@ const state = {
               borderColor: "#3b82f6",
               borderWidth: 1.5,
               borderRadius: 6,
+            },
+          ],
+        },
+        options: chartOptions("₹"),
+      });
+    }
+
+    const monthlyCanvas = document.getElementById("monthlyChart");
+    if (monthlyCanvas) {
+      const monthlyCtx = monthlyCanvas.getContext("2d");
+      monthlyChartInstance = new Chart(monthlyCtx, {
+        type: "line",
+        data: {
+          labels: [
+            "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+          ],
+          datasets: [
+            {
+              label: "Sales",
+              data: metrics.monthlySales,
+              borderColor: "#22c55e",
+              backgroundColor: "rgba(34, 197, 94, 0.15)",
+              borderWidth: 2.5,
+              tension: 0.4,
+              fill: true,
+              pointRadius: 4,
+              pointHoverRadius: 6,
             },
           ],
         },
@@ -1006,12 +1282,38 @@ const state = {
     if (
       document.getElementById("salesChart") ||
       document.getElementById("categoryChart") ||
-      document.getElementById("yearlyChart")
+      document.getElementById("yearlyChart") ||
+      document.getElementById("monthlyChart")
     ) {
       initCharts();
       if (document.getElementById("salesChart")) {
         updateSalesChart();
       }
+    }
+    
+    if (recentTransactionsBody) {
+      renderRecentTransactions();
+    }
+    
+    if (topCategoriesList) {
+      renderTopCategories();
+    }
+
+    // Dashboard-only sections
+    if (recentPropertiesBody) {
+      renderRecentProperties();
+    }
+
+    if (actionCenterListEl) {
+      renderActionCenter();
+    }
+
+    if (topLocationsListEl) {
+      renderTopLocations();
+    }
+
+    if (partnerSnapshotBodyEl) {
+      renderPartnerSnapshot();
     }
 
     // Mobile sidebar toggle
